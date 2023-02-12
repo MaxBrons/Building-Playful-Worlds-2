@@ -55,7 +55,7 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -66,7 +66,7 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -77,7 +77,7 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -88,7 +88,7 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -116,6 +116,24 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Mouse Position"",
+                    ""type"": ""Value"",
+                    ""id"": ""217dbc85-0d0c-4a19-8e4b-317a669f190a"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Scroll Position"",
+                    ""type"": ""Value"",
+                    ""id"": ""fe59e57b-4b21-4056-b163-98d7040cef47"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -125,7 +143,7 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""Fire Left"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -136,15 +154,54 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""Fire Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a5edf2cc-33d6-4e41-a734-79d3455563a0"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Mouse Position"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""463f0548-ae35-4a91-9e17-3d76fe9bba35"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Scroll Position"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""Keyboard & Mouse"",
+            ""bindingGroup"": ""Keyboard & Mouse"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<VirtualMouse>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
@@ -153,6 +210,8 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_FireLeft = m_Mouse.FindAction("Fire Left", throwIfNotFound: true);
         m_Mouse_FireRight = m_Mouse.FindAction("Fire Right", throwIfNotFound: true);
+        m_Mouse_MousePosition = m_Mouse.FindAction("Mouse Position", throwIfNotFound: true);
+        m_Mouse_ScrollPosition = m_Mouse.FindAction("Scroll Position", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -247,12 +306,16 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
     private IMouseActions m_MouseActionsCallbackInterface;
     private readonly InputAction m_Mouse_FireLeft;
     private readonly InputAction m_Mouse_FireRight;
+    private readonly InputAction m_Mouse_MousePosition;
+    private readonly InputAction m_Mouse_ScrollPosition;
     public struct MouseActions
     {
         private @InputActionsCore m_Wrapper;
         public MouseActions(@InputActionsCore wrapper) { m_Wrapper = wrapper; }
         public InputAction @FireLeft => m_Wrapper.m_Mouse_FireLeft;
         public InputAction @FireRight => m_Wrapper.m_Mouse_FireRight;
+        public InputAction @MousePosition => m_Wrapper.m_Mouse_MousePosition;
+        public InputAction @ScrollPosition => m_Wrapper.m_Mouse_ScrollPosition;
         public InputActionMap Get() { return m_Wrapper.m_Mouse; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -268,6 +331,12 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
                 @FireRight.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnFireRight;
                 @FireRight.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnFireRight;
                 @FireRight.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnFireRight;
+                @MousePosition.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnMousePosition;
+                @MousePosition.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnMousePosition;
+                @MousePosition.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnMousePosition;
+                @ScrollPosition.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnScrollPosition;
+                @ScrollPosition.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnScrollPosition;
+                @ScrollPosition.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnScrollPosition;
             }
             m_Wrapper.m_MouseActionsCallbackInterface = instance;
             if (instance != null)
@@ -278,10 +347,25 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
                 @FireRight.started += instance.OnFireRight;
                 @FireRight.performed += instance.OnFireRight;
                 @FireRight.canceled += instance.OnFireRight;
+                @MousePosition.started += instance.OnMousePosition;
+                @MousePosition.performed += instance.OnMousePosition;
+                @MousePosition.canceled += instance.OnMousePosition;
+                @ScrollPosition.started += instance.OnScrollPosition;
+                @ScrollPosition.performed += instance.OnScrollPosition;
+                @ScrollPosition.canceled += instance.OnScrollPosition;
             }
         }
     }
     public MouseActions @Mouse => new MouseActions(this);
+    private int m_KeyboardMouseSchemeIndex = -1;
+    public InputControlScheme KeyboardMouseScheme
+    {
+        get
+        {
+            if (m_KeyboardMouseSchemeIndex == -1) m_KeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard & Mouse");
+            return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
+        }
+    }
     public interface IMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -290,5 +374,7 @@ public partial class @InputActionsCore : IInputActionCollection2, IDisposable
     {
         void OnFireLeft(InputAction.CallbackContext context);
         void OnFireRight(InputAction.CallbackContext context);
+        void OnMousePosition(InputAction.CallbackContext context);
+        void OnScrollPosition(InputAction.CallbackContext context);
     }
 }

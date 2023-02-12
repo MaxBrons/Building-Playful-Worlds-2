@@ -2,19 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.InputSystem.InputAction;
 
 public class Playermovement : MonoBehaviour
 {
     private float m_MovementSpeed = 5.0f;
 
-    public void OnMovement(CallbackContext context)
+    private void OnEnable()
     {
-        print("Movement: " + context.ReadValue<Vector2>());
+        InputManager.Subscribe(OnMovement);
     }
 
-    public void OnFireLeft(CallbackContext context)
+    private void OnDisable()
     {
-        print("Mouse: " + context.ReadValue<float>());
+        InputManager.Unsubscribe(OnMovement);
+    }
+
+    public void OnMovement(InputAction.CallbackContext context)
+    {
+        print("Movement: " + context.ReadValue<Vector2>());
     }
 }
