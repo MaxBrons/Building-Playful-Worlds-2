@@ -1,14 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static System.Collections.Specialized.BitVector32;
-using UnityEngine.Windows;
 
 public class InputManager : MonoBehaviour
 {
@@ -78,7 +73,7 @@ public class InputManager : MonoBehaviour
     public static T ReadActionValue<T>(string inputActionName)
     {
         var action = GetInputAction(inputActionName);
-        if(!action.IsUnityNull())
+        if(action != null)
         {
             return (T)action?.ReadValueAsObject();
         }

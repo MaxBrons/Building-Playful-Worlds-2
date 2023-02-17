@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -33,10 +34,22 @@ public class Playermovement : MonoBehaviour
                 var isWalkable = hit.transform.GetComponent<IWalkable>() != null;
                 if (isWalkable)
                 {
-                    GlobalFunctionLibrary.GetPlayerController().transform.position = hit.transform.position;
+                    StartCoroutine(MoveTowards(hit.transform.position, 1));
                 }
                 return;
             }
+        }
+    }
+
+    private IEnumerator MoveTowards(Vector3 target, float duration)
+    {
+        var elapsedTime = Time.deltaTime;
+
+        while (elapsedTime < duration)
+        {
+            transform.position = Vector3.Lerp(transform.position, target, elapsedTime / duration);
+            yield return new WaitForEndOfFrame();
+            elapsedTime += Time.deltaTime;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,11 +10,11 @@ public static class GlobalFunctionLibrary
 
     public static Playermovement GetPlayerController(int playerIndex = 0)
     {
-        if (s_PlayerControllers.Length == 0)
-        {
-            s_PlayerControllers = MonoBehaviour.FindObjectsOfType<Playermovement>();
-        }
+            if (s_PlayerControllers == null)
+            {
+                s_PlayerControllers = MonoBehaviour.FindObjectsOfType<Playermovement>();
+            }
 
-        return s_PlayerControllers[playerIndex];
+            return s_PlayerControllers[playerIndex];
     }
 }
