@@ -75,6 +75,16 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    public static T ReadActionValue<T>(string inputActionName)
+    {
+        var action = GetInputAction(inputActionName);
+        if(!action.IsUnityNull())
+        {
+            return (T)action?.ReadValueAsObject();
+        }
+        return default;
+    }
+
     private static InputAction GetInputAction(string actionName)
     {
         var inputAction = s_InputActions.Find(act => {
